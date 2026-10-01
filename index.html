@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>叶炳材 · 个人主页</title>
+<style>
+  :root {
+    --bg: #f6f8f7;
+    --card: #ffffff;
+    --text: #1f2933;
+    --muted: #6b7280;
+    --accent: #0e9f6e;
+    --accent-soft: #d1fae5;
+    --border: #e5e7eb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    background: linear-gradient(180deg, #eef7f1 0%, var(--bg) 30%);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  .wrap {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* 头像 */
+  .hero {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .avatar {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    margin: 0 auto 18px;
+    background: linear-gradient(135deg, #34d399, #0e9f6e);
+    color: #fff;
+    font-size: 44px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 24px rgba(14, 159, 110, 0.25);
+  }
+
+  .hero h1 {
+    font-size: 30px;
+    letter-spacing: 2px;
+  }
+
+  .hero .role {
+    color: var(--accent);
+    font-weight: 600;
+    margin-top: 6px;
+    font-size: 17px;
+  }
+
+  .hero .tagline {
+    color: var(--muted);
+    margin-top: 8px;
+    font-size: 15px;
+  }
+
+  /* 卡片通用 */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .card h2 {
+    font-size: 18px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card h2::before {
+    content: "";
+    width: 4px;
+    height: 18px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .about p {
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* 联系方式 */
+  .contact-list {
+    list-style: none;
+  }
+
+  .contact-list li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .contact-list li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .contact-list li:first-child {
+    padding-top: 0;
+  }
+
+  .contact-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .contact-info {
+    min-width: 0;
+  }
+
+  .contact-info .label {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .contact-info .value {
+    font-size: 15px;
+    font-weight: 500;
+    word-break: break-all;
+  }
+
+  .contact-info a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .contact-info a:hover {
+    text-decoration: underline;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 32px;
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- 头像 + 姓名 -->
+    <header class="hero">
+      <div class="avatar">叶</div>
+      <h1>叶炳材</h1>
+      <div class="role">学生</div>
+      <p class="tagline">保持好奇，持续学习。</p>
+    </header>
+
+    <!-- 关于我 -->
+    <section class="card about">
+      <h2>关于我</h2>
+      <!-- TODO: 替换成你自己的简介 -->
+      <p>你好，我是叶炳材，一名学生。热爱学习新事物，喜欢在探索中成长。这里是我的个人主页，欢迎认识我。</p>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="card">
+      <h2>联系方式</h2>
+      <ul class="contact-list">
+        <li>
+          <div class="contact-icon">✉</div>
+          <div class="contact-info">
+            <div class="label">邮箱</div>
+            <!-- TODO: 替换成你的邮箱 -->
+            <div class="value"><a href="mailto:yourname@example.com">yourname@example.com</a></div>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon">💬</div>
+          <div class="contact-info">
+            <div class="label">微信</div>
+            <!-- TODO: 替换成你的微信号 -->
+            <div class="value">你的微信号</div>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon">🐧</div>
+          <div class="contact-info">
+            <div class="label">QQ</div>
+            <div class="value">248997661</div>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon">⌥</div>
+          <div class="contact-info">
+            <div class="label">GitHub</div>
+            <!-- TODO: 替换成你的 GitHub 链接 -->
+            <div class="value"><a href="https://github.com/yourname" target="_blank">github.com/yourname</a></div>
+          </div>
+        </li>
+        <li>
+          <div class="contact-icon">☎</div>
+          <div class="contact-info">
+            <div class="label">电话</div>
+            <!-- TODO: 替换成你的电话号码 -->
+            <div class="value">你的电话号码</div>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <footer>© 2026 叶炳材 · 个人主页</footer>
+  </div>
+</body>
+</html>
