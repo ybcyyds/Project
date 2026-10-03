@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>猜数游戏 · 叶炳材</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎋</text></svg>">
+<style>
+  :root {
+    --bg: #06110c;
+    --card: rgba(255, 255, 255, 0.045);
+    --card-border: rgba(143, 210, 175, 0.14);
+    --text: #e7f3ec;
+    --muted: #9dbbaa;
+    --green: #6fcf97;
+    --green-bright: #9be7b8;
+    --green-deep: #2f7d57;
+    --red: #e88b7f;
+    --yellow: #e6c87a;
+    --radius: 18px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", sans-serif;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(63, 140, 96, 0.22), transparent 60%),
+      radial-gradient(700px 500px at 110% 20%, rgba(47, 125, 87, 0.18), transparent 60%),
+      linear-gradient(180deg, #07140e 0%, #050e09 60%, #040b07 100%);
+    background-attachment: fixed;
+    color: var(--text); min-height: 100vh; line-height: 1.7;
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 40px 20px; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+  .back { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .back:hover { color: var(--green-bright); }
+  .title-mini { color: var(--green); font-size: 13px; letter-spacing: 2px; }
+
+  h1 { font-size: 30px; letter-spacing: 4px; text-align: center; margin-bottom: 8px; }
+  .sub { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 26px; }
+
+  .panel {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 26px; backdrop-filter: blur(8px);
+  }
+
+  /* 状态栏 */
+  .stats { display: flex; gap: 12px; margin-bottom: 20px; }
+  .stat {
+    flex: 1; text-align: center; padding: 12px 8px;
+    background: rgba(111, 207, 151, 0.06);
+    border: 1px solid rgba(111, 207, 151, 0.14);
+    border-radius: 14px;
+  }
+  .stat .num { font-size: 22px; font-weight: 700; color: var(--green-bright); }
+  .stat .lbl { font-size: 12px; color: var(--muted); }
+
+  /* 区间提示 */
+  .range {
+    text-align: center; font-size: 14px; color: var(--muted);
+    margin-bottom: 18px; letter-spacing: 1px;
+  }
+  .range b { color: var(--green); font-size: 17px; }
+
+  /* 输入区 */
+  .input-row { display: flex; gap: 10px; margin-bottom: 18px; }
+  #guessInput {
+    flex: 1; min-width: 0; padding: 14px 18px;
+    font-size: 20px; text-align: center; letter-spacing: 3px;
+    color: var(--text); background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--card-border); border-radius: 14px;
+    outline: none; transition: border-color .2s;
+  }
+  #guessInput:focus { border-color: var(--green); }
+  #guessInput:disabled { opacity: .5; }
+  button {
+    padding: 14px 26px; border: none; border-radius: 14px; cursor: pointer;
+    font-size: 15px; font-weight: 600; color: #06210f;
+    background: linear-gradient(145deg, var(--green-bright), var(--green-deep));
+    transition: transform .15s, box-shadow .15s, opacity .15s;
+  }
+  button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(111,207,151,.28); }
+  button:active:not(:disabled) { transform: translateY(0); }
+  button:disabled { cursor: default; opacity: .55; }
+  #restartBtn { display: none; width: 100%; margin-top: 14px; }
+
+  /* 消息区 */
+  #message {
+    min-height: 52px; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 17px; padding: 12px;
+    border-radius: 12px; margin-bottom: 16px;
+    background: rgba(111, 207, 151, 0.07);
+    transition: background .25s;
+  }
+  #message.big { color: var(--green-bright); font-weight: 700; font-size: 19px;
+                 background: rgba(111, 207, 151, 0.14); }
+  #message.small { color: var(--red); }
+  #message.warn { color: var(--yellow); font-size: 14px; }
+
+  /* 历史 */
+  .history-title { font-size: 13px; color: var(--muted); margin-bottom: 10px; letter-spacing: 1px; }
+  #history { display: flex; flex-wrap: wrap; gap: 8px; min-height: 32px; }
+  .chip {
+    padding: 5px 12px; border-radius: 999px; font-size: 14px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--card-border);
+    animation: pop .25s ease;
+  }
+  .chip.high { color: var(--red); border-color: rgba(232,139,127,.35); }
+  .chip.low { color: var(--yellow); border-color: rgba(230,200,122,.35); }
+  .chip.win { color: var(--green-bright); border-color: rgba(111,207,151,.5);
+              background: rgba(111,207,151,.14); font-weight: 700; }
+  @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  /* 彩带 */
+  .confetti { position: fixed; top: -12px; width: 8px; height: 14px;
+              border-radius: 2px; z-index: 99; pointer-events: none; }
+  @keyframes fall { to { transform: translateY(105vh) rotate(720deg); } }
+
+  footer { text-align: center; color: #5e7a6c; font-size: 12px; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← 返回主页</a>
+    <span class="title-mini">MINI GAME</span>
+  </div>
+
+  <h1>猜数游戏</h1>
+  <p class="sub">欢迎来到猜数游戏！<br>系统已经生成一个数字（1-100 之间），请你来猜：</p>
+
+  <div class="panel">
+    <div class="stats">
+      <div class="stat"><div class="num" id="countNum">0</div><div class="lbl">已猜次数</div></div>
+      <div class="stat"><div class="num" id="rangeNum">1-100</div><div class="lbl">当前范围</div></div>
+      <div class="stat"><div class="num" id="bestNum">—</div><div class="lbl">最佳纪录</div></div>
+    </div>
+
+    <div class="input-row">
+      <input id="guessInput" type="number" min="1" max="100" placeholder="输入 1-100" inputmode="numeric" autofocus>
+      <button id="guessBtn">猜！</button>
+    </div>
+
+    <div id="message">输入一个 1 到 100 的整数，开始吧～</div>
+
+    <div class="history-title">猜测记录</div>
+    <div id="history"></div>
+
+    <button id="restartBtn">再来一局</button>
+  </div>
+
+  <footer>改编自我的 C 语言小程序 · 用 ♥ 与 JavaScript 重写</footer>
+</div>
+
+<script>
+(function () {
+  var MIN = 1, MAX = 100;
+  var target, count, low, high, over, history;
+  var best = localStorage.getItem('guessBest');
+  best = best ? parseInt(best, 10) : null;
+
+  var input = document.getElementById('guessInput');
+  var btn = document.getElementById('guessBtn');
+  var restartBtn = document.getElementById('restartBtn');
+  var msg = document.getElementById('message');
+  var historyBox = document.getElementById('history');
+  var countNum = document.getElementById('countNum');
+  var rangeNum = document.getElementById('rangeNum');
+  var bestNum = document.getElementById('bestNum');
+
+  function newGame() {
+    target = Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
+    count = 0; low = MIN; high = MAX; over = false; history = [];
+    countNum.textContent = '0';
+    rangeNum.textContent = low + '-' + high;
+    bestNum.textContent = best ? best + ' 次' : '—';
+    historyBox.innerHTML = '';
+    input.disabled = false;
+    btn.disabled = false;
+    restartBtn.style.display = 'none';
+    input.value = '';
+    input.focus();
+    setMsg('输入一个 1 到 100 的整数，开始吧～', '');
+  }
+
+  function setMsg(text, cls) {
+    msg.textContent = text;
+    msg.className = cls || '';
+  }
+
+  function addChip(text, cls) {
+    var s = document.createElement('span');
+    s.className = 'chip ' + cls;
+    s.textContent = text;
+    historyBox.appendChild(s);
+  }
+
+  function guess() {
+    if (over) return;
+    var v = parseInt(input.value, 10);
+    if (isNaN(v) || input.value.trim() === '') {
+      setMsg('请输入一个整数哦～', 'warn'); return;
+    }
+    if (v < MIN || v > MAX) {
+      setMsg('数字要在 1 到 100 之间！', 'warn'); return;
+    }
+    if (history.indexOf(v) !== -1) {
+      setMsg(v + ' 已经猜过啦，换一个数试试', 'warn'); return;
+    }
+
+    count++;
+    countNum.textContent = count;
+    history.push(v);
+
+    if (v === target) {
+      over = true;
+      addChip(v + ' ✓', 'win');
+      setMsg('恭喜你，猜对了！一共用了 ' + count + ' 次。', 'big');
+      input.disabled = true;
+      btn.disabled = true;
+      restartBtn.style.display = 'block';
+      if (!best || count < best) {
+        best = count;
+        localStorage.setItem('guessBest', String(best));
+        bestNum.textContent = best + ' 次';
+      }
+      confetti();
+    } else if (v > target) {
+      high = Math.min(high, v - 1);
+      addChip(v + ' ↓', 'high');
+      setMsg('你猜的数太大了，请再猜一个。', 'small');
+      rangeNum.textContent = low + '-' + high;
+    } else {
+      low = Math.max(low, v + 1);
+      addChip(v + ' ↑', 'low');
+      setMsg('你猜的数太小了，请再猜一个。', '');
+      rangeNum.textContent = low + '-' + high;
+    }
+    input.value = '';
+    input.focus();
+  }
+
+  // 猜对时的小彩带
+  function confetti() {
+    var colors = ['#9be7b8', '#6fcf97', '#e6c87a', '#e88b7f', '#7fc8e8'];
+    for (var i = 0; i < 60; i++) {
+      var c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.background = colors[Math.floor(Math.random() * colors.length)];
+      c.style.animation = 'fall ' + (2 + Math.random() * 2) + 's linear ' + Math.random() * 0.6 + 's forwards';
+      document.body.appendChild(c);
+      (function (el) { setTimeout(function () { el.remove(); }, 5000); })(c);
+    }
+  }
+
+  btn.addEventListener('click', guess);
+  restartBtn.addEventListener('click', newGame);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') guess();
+  });
+
+  newGame();
+})();
+</script>
+</body>
+</html>

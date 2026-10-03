@@ -4,234 +4,303 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>叶炳材 · 个人主页</title>
+<meta name="description" content="叶炳材的个人主页 —— 一名保持好奇、持续学习的学生。">
+<meta name="author" content="叶炳材">
+<meta property="og:title" content="叶炳材 · 个人主页">
+<meta property="og:description" content="保持好奇，持续学习。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎋</text></svg>">
 <style>
   :root {
-    --bg: #f6f8f7;
-    --card: #ffffff;
-    --text: #1f2933;
-    --muted: #6b7280;
-    --accent: #0e9f6e;
-    --accent-soft: #d1fae5;
-    --border: #e5e7eb;
+    --bg: #06110c;
+    --bg-soft: #0b1a12;
+    --card: rgba(255, 255, 255, 0.045);
+    --card-border: rgba(143, 210, 175, 0.14);
+    --text: #e7f3ec;
+    --muted: #9dbbaa;
+    --green: #6fcf97;
+    --green-bright: #9be7b8;
+    --green-deep: #2f7d57;
+    --radius: 18px;
+    --maxw: 880px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
+  html { scroll-behavior: smooth; }
   body {
-    font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
-    background: linear-gradient(180deg, #eef7f1 0%, var(--bg) 30%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
     color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
-    padding: 40px 20px;
+    line-height: 1.75;
+    overflow-x: hidden;
   }
 
-  .wrap {
-    max-width: 640px;
-    margin: 0 auto;
+  /* —— 背景：竹林绿光晕 + 微动 —— */
+  .bg {
+    position: fixed; inset: 0; z-index: -2;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(63, 140, 96, 0.22), transparent 60%),
+      radial-gradient(700px 500px at 110% 20%, rgba(47, 125, 87, 0.18), transparent 60%),
+      radial-gradient(800px 600px at 50% 120%, rgba(111, 207, 151, 0.10), transparent 60%),
+      linear-gradient(180deg, #07140e 0%, #050e09 60%, #040b07 100%);
   }
+  .bg::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(1200px 600px at 50% 0%, rgba(155, 231, 184, 0.06), transparent 70%);
+    animation: breathe 9s ease-in-out infinite alternate;
+  }
+  @keyframes breathe { from { opacity: 0.5; } to { opacity: 1; } }
 
-  /* 头像 */
-  .hero {
+  /* —— 顶部导航 —— */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(14px);
+    background: rgba(6, 17, 12, 0.72);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .nav-inner {
+    max-width: var(--maxw); margin: 0 auto;
+    padding: 12px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .logo { font-weight: 700; letter-spacing: 2px; color: var(--green-bright); text-decoration: none; font-size: 15px; }
+  .nav-links { display: flex; gap: 26px; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 14px;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--green-bright); }
+
+  main { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* —— Hero —— */
+  header.hero {
     text-align: center;
-    margin-bottom: 36px;
+    padding: 96px 0 72px;
   }
-
   .avatar {
-    width: 108px;
-    height: 108px;
+    width: 112px; height: 112px; margin: 0 auto 26px;
     border-radius: 50%;
-    margin: 0 auto 18px;
-    background: linear-gradient(135deg, #34d399, #0e9f6e);
-    color: #fff;
-    font-size: 44px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 24px rgba(14, 159, 110, 0.25);
+    display: grid; place-items: center;
+    font-size: 46px; font-weight: 700; color: #06210f;
+    background: linear-gradient(145deg, var(--green-bright), var(--green-deep));
+    box-shadow: 0 0 0 6px rgba(111, 207, 151, 0.10), 0 18px 50px rgba(47, 125, 87, 0.45);
   }
-
   .hero h1 {
-    font-size: 30px;
-    letter-spacing: 2px;
+    font-size: clamp(32px, 6vw, 46px);
+    letter-spacing: 6px;
+    margin-bottom: 10px;
   }
-
   .hero .role {
-    color: var(--accent);
-    font-weight: 600;
-    margin-top: 6px;
-    font-size: 17px;
+    color: var(--green); font-size: 17px; letter-spacing: 4px; margin-bottom: 18px;
   }
-
-  .hero .tagline {
-    color: var(--muted);
-    margin-top: 8px;
-    font-size: 15px;
+  .hero .tagline { color: var(--muted); font-size: 16px; margin-bottom: 34px; }
+  .btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 24px; border-radius: 999px;
+    font-size: 14px; text-decoration: none;
+    border: 1px solid var(--card-border);
+    color: var(--text);
+    background: var(--card);
+    transition: transform .18s, border-color .18s, background .18s;
   }
+  .btn:hover { transform: translateY(-2px); border-color: var(--green); }
+  .btn.primary {
+    background: linear-gradient(145deg, var(--green), var(--green-deep));
+    color: #06210f; font-weight: 600; border: none;
+  }
+  .btn.primary:hover { box-shadow: 0 10px 30px rgba(111, 207, 151, 0.30); }
 
-  /* 卡片通用 */
+  /* —— 通用区块 —— */
+  section { padding: 46px 0; }
+  h2 {
+    font-size: 22px; letter-spacing: 3px; margin-bottom: 26px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2::before {
+    content: ""; width: 6px; height: 22px; border-radius: 3px;
+    background: linear-gradient(180deg, var(--green-bright), var(--green-deep));
+  }
   .card {
     background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 28px;
   }
+  .card p { color: var(--muted); }
+  .card p + p { margin-top: 12px; }
 
-  .card h2 {
-    font-size: 18px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  /* —— 技能标签 —— */
+  .tags { display: flex; flex-wrap: wrap; gap: 12px; }
+  .tag {
+    padding: 8px 18px; border-radius: 999px; font-size: 14px;
+    color: var(--green-bright);
+    background: rgba(111, 207, 151, 0.08);
+    border: 1px solid rgba(111, 207, 151, 0.22);
+    transition: background .2s, transform .2s;
   }
+  .tag:hover { background: rgba(111, 207, 151, 0.16); transform: translateY(-2px); }
 
-  .card h2::before {
-    content: "";
-    width: 4px;
-    height: 18px;
-    background: var(--accent);
-    border-radius: 2px;
+  /* —— 项目 —— */
+  .projects { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .project {
+    display: block; text-decoration: none; color: inherit;
+    padding: 24px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--card-border);
+    transition: transform .2s, border-color .2s, box-shadow .2s;
   }
+  .project:hover {
+    transform: translateY(-4px);
+    border-color: rgba(111, 207, 151, 0.45);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  }
+  .project .icon { font-size: 26px; margin-bottom: 12px; }
+  .project h3 { font-size: 17px; margin-bottom: 8px; }
+  .project p { color: var(--muted); font-size: 14px; margin-bottom: 14px; }
+  .project .go { color: var(--green); font-size: 13px; }
 
-  .about p {
-    color: var(--muted);
-    font-size: 15px;
+  /* —— 联系方式 —— */
+  .contacts { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .contact {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 22px; border-radius: var(--radius);
+    background: var(--card); border: 1px solid var(--card-border);
+    text-decoration: none; color: inherit;
+    transition: border-color .2s, transform .2s;
   }
-
-  /* 联系方式 */
-  .contact-list {
-    list-style: none;
+  .contact:hover { border-color: var(--green); transform: translateY(-2px); }
+  .contact .c-icon {
+    width: 44px; height: 44px; flex: none;
+    border-radius: 12px; display: grid; place-items: center;
+    background: rgba(111, 207, 151, 0.12);
   }
-
-  .contact-list li {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .contact-list li:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-
-  .contact-list li:first-child {
-    padding-top: 0;
-  }
-
-  .contact-icon {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
-    border-radius: 10px;
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .contact-info {
-    min-width: 0;
-  }
-
-  .contact-info .label {
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .contact-info .value {
-    font-size: 15px;
-    font-weight: 500;
-    word-break: break-all;
-  }
-
-  .contact-info a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-
-  .contact-info a:hover {
-    text-decoration: underline;
-  }
+  .contact .c-icon svg { width: 22px; height: 22px; fill: var(--green-bright); }
+  .contact .c-label { font-size: 12px; color: var(--muted); }
+  .contact .c-value { font-size: 15px; word-break: break-all; }
 
   footer {
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    margin-top: 32px;
+    text-align: center; padding: 48px 24px 40px;
+    color: #6f8f7d; font-size: 13px;
+    border-top: 1px solid var(--card-border);
+    margin-top: 40px;
+  }
+  footer .heart { color: var(--green); }
+
+  @media (max-width: 600px) {
+    .nav-links { gap: 16px; }
+    header.hero { padding: 70px 0 50px; }
+    .card { padding: 22px; }
   }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- 头像 + 姓名 -->
-    <header class="hero">
-      <div class="avatar">叶</div>
-      <h1>叶炳材</h1>
-      <div class="role">学生</div>
-      <p class="tagline">保持好奇，持续学习。</p>
-    </header>
+<div class="bg"></div>
 
-    <!-- 关于我 -->
-    <section class="card about">
-      <h2>关于我</h2>
-      <!-- TODO: 替换成你自己的简介 -->
-      <p>你好，我是叶炳材，一名学生。热爱学习新事物，喜欢在探索中成长。这里是我的个人主页，欢迎认识我。</p>
-    </section>
-
-    <!-- 联系方式 -->
-    <section class="card">
-      <h2>联系方式</h2>
-      <ul class="contact-list">
-        <li>
-          <div class="contact-icon">✉</div>
-          <div class="contact-info">
-            <div class="label">邮箱</div>
-            <!-- TODO: 替换成你的邮箱 -->
-            <div class="value"><a href="mailto:yourname@example.com">yourname@example.com</a></div>
-          </div>
-        </li>
-        <li>
-          <div class="contact-icon">💬</div>
-          <div class="contact-info">
-            <div class="label">微信</div>
-            <!-- TODO: 替换成你的微信号 -->
-            <div class="value">你的微信号</div>
-          </div>
-        </li>
-        <li>
-          <div class="contact-icon">🐧</div>
-          <div class="contact-info">
-            <div class="label">QQ</div>
-            <div class="value">248997661</div>
-          </div>
-        </li>
-        <li>
-          <div class="contact-icon">⌥</div>
-          <div class="contact-info">
-            <div class="label">GitHub</div>
-            <!-- TODO: 替换成你的 GitHub 链接 -->
-            <div class="value"><a href="https://github.com/yourname" target="_blank">github.com/yourname</a></div>
-          </div>
-        </li>
-        <li>
-          <div class="contact-icon">☎</div>
-          <div class="contact-info">
-            <div class="label">电话</div>
-            <!-- TODO: 替换成你的电话号码 -->
-            <div class="value">你的电话号码</div>
-          </div>
-        </li>
-      </ul>
-    </section>
-
-    <footer>© 2026 叶炳材 · 个人主页</footer>
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top">叶炳材</a>
+    <div class="nav-links">
+      <a href="#about">关于</a>
+      <a href="#skills">技能</a>
+      <a href="#projects">项目</a>
+      <a href="#contact">联系</a>
+    </div>
   </div>
+</nav>
+
+<main id="top">
+
+  <header class="hero">
+    <div class="avatar">叶</div>
+    <h1>叶炳材</h1>
+    <div class="role">学 生</div>
+    <p class="tagline">保持好奇，持续学习，在探索中成长。</p>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/ybcyyds" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+      <a class="btn" href="#contact">联系我</a>
+    </div>
+  </header>
+
+  <section id="about">
+    <h2>关于我</h2>
+    <div class="card">
+      <p>你好，我是叶炳材，一名学生。我喜欢接触新鲜事物，享受把一个想法亲手做出来的过程——无论是写代码、做网页，还是折腾各种有趣的小工具。</p>
+      <p>目前正在学习编程与 Web 开发，相信「保持好奇、持续学习」是最值得坚持的事。这个主页本身就是我用 HTML / CSS / JavaScript 完成的小作品。</p>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>正在学习</h2>
+    <div class="tags">
+      <span class="tag">HTML</span>
+      <span class="tag">CSS</span>
+      <span class="tag">JavaScript</span>
+      <span class="tag">Python</span>
+      <span class="tag">Git</span>
+      <span class="tag">GitHub</span>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>我的项目</h2>
+    <div class="projects">
+      <a class="project" href="guess.html">
+        <div class="icon">🎯</div>
+        <h3>猜数游戏</h3>
+        <p>改编自我的 C 语言小程序：系统生成 1-100 的数字，看你几次能猜中。带次数统计、范围提示和最佳纪录。</p>
+        <span class="go">开始游戏 →</span>
+      </a>
+      <a class="project" href="https://github.com/ybcyyds/Project" target="_blank" rel="noopener">
+        <div class="icon">🌿</div>
+        <h3>个人主页</h3>
+        <p>就是你现在看到的这个页面。单文件 HTML，竹林绿深色主题，适配手机与电脑，部署在 GitHub Pages 上。</p>
+        <span class="go">查看仓库 →</span>
+      </a>
+      <a class="project" href="https://github.com/ybcyyds" target="_blank" rel="noopener">
+        <div class="icon">🚧</div>
+        <h3>更多项目</h3>
+        <p>还在学习和建设中，新的作品会陆续放到我的 GitHub，欢迎来看看。</p>
+        <span class="go">前往 GitHub →</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>联系方式</h2>
+    <div class="contacts">
+      <a class="contact" href="https://github.com/ybcyyds" target="_blank" rel="noopener">
+        <span class="c-icon">
+          <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        </span>
+        <span>
+          <span class="c-label">GitHub</span><br>
+          <span class="c-value">github.com/ybcyyds</span>
+        </span>
+      </a>
+      <div class="contact" style="cursor:default">
+        <span class="c-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.16 2 11.3c0 2.9 1.5 5.48 3.84 7.16-.12 1.2-.7 2.5-1.8 3.4 0 0 2.4-.2 4.5-1.6.78.18 1.6.27 2.46.27 5.52 0 10-4.16 10-9.3S17.52 2 12 2z"/></svg>
+        </span>
+        <span>
+          <span class="c-label">QQ</span><br>
+          <span class="c-value">248997661</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>© 2026 叶炳材 · 用 <span class="heart">♥</span> 与代码构建</p>
+  <p style="margin-top:6px">Hosted on GitHub Pages</p>
+</footer>
+
 </body>
 </html>
