@@ -6,12 +6,14 @@
 
 - 主页：<https://ybcyyds.github.io/Project/>
 - 猜数游戏：<https://ybcyyds.github.io/Project/guess.html>
+- 石头剪刀布：<https://ybcyyds.github.io/Project/rps.html>
 
 ## 功能
 
 - 个人介绍与技能标签
 - 项目展示与联系方式（GitHub、QQ）
 - 🎯 猜数小游戏（`guess.html`，由我的 C 语言小程序改编）
+- ✊ 石头剪刀布（`rps.html`，由我的 C 语言小程序改编）
 - 响应式布局，手机 / 电脑均可正常浏览
 - 无任何外部依赖，无需构建
 
@@ -31,6 +33,7 @@ python -m http.server 8000
 .
 ├── index.html      # 主页（全部样式与脚本内联）
 ├── guess.html      # 猜数小游戏
+├── rps.html        # 石头剪刀布小游戏
 ├── 404.html        # GitHub Pages 404 页面
 └── README.md
 ```

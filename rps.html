@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>石头剪刀布 · 叶炳材</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎋</text></svg>">
+<style>
+  :root {
+    --bg: #06110c;
+    --card: rgba(255, 255, 255, 0.045);
+    --card-border: rgba(143, 210, 175, 0.14);
+    --text: #e7f3ec;
+    --muted: #9dbbaa;
+    --green: #6fcf97;
+    --green-bright: #9be7b8;
+    --green-deep: #2f7d57;
+    --red: #e88b7f;
+    --yellow: #e6c87a;
+    --radius: 18px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Microsoft YaHei", sans-serif;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(63, 140, 96, 0.22), transparent 60%),
+      radial-gradient(700px 500px at 110% 20%, rgba(47, 125, 87, 0.18), transparent 60%),
+      linear-gradient(180deg, #07140e 0%, #050e09 60%, #040b07 100%);
+    background-attachment: fixed;
+    color: var(--text); min-height: 100vh; line-height: 1.7;
+  }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 40px 20px; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+  .back { color: var(--muted); text-decoration: none; font-size: 14px; transition: color .2s; }
+  .back:hover { color: var(--green-bright); }
+  .title-mini { color: var(--green); font-size: 13px; letter-spacing: 2px; }
+
+  h1 { font-size: 30px; letter-spacing: 4px; text-align: center; margin-bottom: 6px; }
+  .sub { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 26px; }
+
+  .panel {
+    background: var(--card); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 28px 24px; backdrop-filter: blur(8px);
+  }
+
+  /* 比分 */
+  .stats { display: flex; gap: 12px; margin-bottom: 28px; }
+  .stat {
+    flex: 1; text-align: center; padding: 14px 8px;
+    background: rgba(111, 207, 151, 0.06);
+    border: 1px solid rgba(111, 207, 151, 0.14);
+    border-radius: 14px;
+  }
+  .stat .num { font-size: 24px; font-weight: 700; }
+  .stat .lbl { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  #winNum { color: var(--green-bright); }
+  #drawNum { color: var(--yellow); }
+  #loseNum { color: var(--red); }
+
+  /* 对战区 */
+  .arena { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 22px; }
+  .fighter { flex: 1; text-align: center; }
+  .fighter .who { font-size: 13px; color: var(--muted); margin-bottom: 10px; letter-spacing: 2px; }
+  .hand {
+    width: 104px; height: 104px; margin: 0 auto;
+    display: grid; place-items: center;
+    font-size: 60px; line-height: 1;
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+  }
+  .hand.shake { animation: shake .5s ease-in-out 3; }
+  @keyframes shake {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    25% { transform: translateY(-12px) rotate(-8deg); }
+    75% { transform: translateY(-4px) rotate(8deg); }
+  }
+  .vs { font-size: 22px; font-weight: 700; color: var(--green); letter-spacing: 1px; }
+
+  /* 结果 */
+  #result {
+    min-height: 56px; display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 20px; font-weight: 700; letter-spacing: 2px;
+    border-radius: 12px; margin-bottom: 24px;
+    background: rgba(111, 207, 151, 0.07); color: var(--muted);
+  }
+  #result.win { color: var(--green-bright); background: rgba(111, 207, 151, 0.14); }
+  #result.lose { color: var(--red); background: rgba(232, 139, 127, 0.10); }
+  #result.draw { color: var(--yellow); background: rgba(230, 200, 122, 0.10); }
+
+  /* 出拳按钮 */
+  .choices { display: flex; gap: 14px; }
+  .choice {
+    flex: 1; padding: 18px 8px; cursor: pointer;
+    border-radius: 16px; text-align: center;
+    background: rgba(111, 207, 151, 0.06);
+    border: 1px solid rgba(111, 207, 151, 0.18);
+    color: var(--text);
+    transition: transform .15s, border-color .15s, background .15s;
+    user-select: none;
+  }
+  .choice:hover:not(:disabled) {
+    transform: translateY(-3px);
+    border-color: var(--green);
+    background: rgba(111, 207, 151, 0.14);
+  }
+  .choice:active:not(:disabled) { transform: translateY(0); }
+  .choice:disabled { opacity: .5; cursor: default; }
+  .choice .e { font-size: 40px; line-height: 1.2; display: block; }
+  .choice .t { font-size: 14px; color: var(--muted); margin-top: 4px; }
+
+  #resetBtn {
+    width: 100%; margin-top: 16px; padding: 13px;
+    border: 1px solid var(--card-border); border-radius: 14px;
+    background: transparent; color: var(--muted);
+    font-size: 14px; cursor: pointer;
+    transition: color .2s, border-color .2s;
+  }
+  #resetBtn:hover { color: var(--green-bright); border-color: var(--green); }
+
+  footer { text-align: center; color: #5e7a6c; font-size: 12px; margin-top: 26px; }
+
+  @media (max-width: 480px) {
+    .hand { width: 84px; height: 84px; font-size: 48px; border-radius: 20px; }
+    .choice .e { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a class="back" href="index.html">← 返回主页</a>
+    <span class="title-mini">MINI GAME</span>
+  </div>
+
+  <h1>石头剪刀布</h1>
+  <p class="sub">点下面的按钮出拳，看看你能不能赢过电脑！</p>
+
+  <div class="panel">
+    <div class="stats">
+      <div class="stat"><div class="num" id="winNum">0</div><div class="lbl">胜</div></div>
+      <div class="stat"><div class="num" id="drawNum">0</div><div class="lbl">平</div></div>
+      <div class="stat"><div class="num" id="loseNum">0</div><div class="lbl">负</div></div>
+    </div>
+
+    <div class="arena">
+      <div class="fighter">
+        <div class="who">你</div>
+        <div class="hand" id="playerHand">✊</div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="fighter">
+        <div class="who">电脑</div>
+        <div class="hand" id="cpuHand">✊</div>
+      </div>
+    </div>
+
+    <div id="result">请出拳 👇</div>
+
+    <div class="choices">
+      <div class="choice" data-move="1"><span class="e">✊</span><span class="t">石头</span></div>
+      <div class="choice" data-move="2"><span class="e">✌️</span><span class="t">剪刀</span></div>
+      <div class="choice" data-move="3"><span class="e">🖐️</span><span class="t">布</span></div>
+    </div>
+
+    <button id="resetBtn">清空比分</button>
+  </div>
+
+  <footer>改编自我的 C 语言小程序 · 用 ♥ 与 JavaScript 重写</footer>
+</div>
+
+<script>
+(function () {
+  // 1=石头 2=剪刀 3=布，与 C 版完全一致
+  var EMOJI = { 1: '✊', 2: '✌️', 3: '🖐️' };
+  var NAME  = { 1: '石头', 2: '剪刀', 3: '布' };
+  var WIN_CASES = { 1: 2, 2: 3, 3: 1 };  // key 克 value
+
+  var win = 0, lose = 0, draw = 0, busy = false;
+
+  var playerHand = document.getElementById('playerHand');
+  var cpuHand = document.getElementById('cpuHand');
+  var result = document.getElementById('result');
+  var choices = document.querySelectorAll('.choice');
+  var resetBtn = document.getElementById('resetBtn');
+
+  function setScore() {
+    document.getElementById('winNum').textContent = win;
+    document.getElementById('drawNum').textContent = draw;
+    document.getElementById('loseNum').textContent = lose;
+  }
+
+  function play(player) {
+    if (busy) return;
+    busy = true;
+    choices.forEach(function (c) { c.disabled = true; });
+    result.className = '';
+    result.textContent = '电脑出招中…';
+
+    playerHand.textContent = EMOJI[player];
+    playerHand.classList.add('shake');
+    cpuHand.classList.add('shake');
+
+    // 摇晃期间快速闪动电脑的手，增加悬念
+    var flicker = setInterval(function () {
+      cpuHand.textContent = EMOJI[1 + Math.floor(Math.random() * 3)];
+    }, 90);
+
+    setTimeout(function () {
+      clearInterval(flicker);
+      playerHand.classList.remove('shake');
+      cpuHand.classList.remove('shake');
+
+      var cpu = 1 + Math.floor(Math.random() * 3);   // 对应 C 版 rand()%3+1
+      cpuHand.textContent = EMOJI[cpu];
+
+      if (player === cpu) {
+        draw++;
+        result.textContent = '平局！都出了' + NAME[cpu];
+        result.className = 'draw';
+      } else if (WIN_CASES[player] === cpu) {
+        win++;
+        result.textContent = '你赢了！' + NAME[player] + ' 克 ' + NAME[cpu];
+        result.className = 'win';
+      } else {
+        lose++;
+        result.textContent = '你输了！' + NAME[cpu] + ' 克 ' + NAME[player];
+        result.className = 'lose';
+      }
+      setScore();
+
+      busy = false;
+      choices.forEach(function (c) { c.disabled = false; });
+    }, 700);
+  }
+
+  choices.forEach(function (c) {
+    c.addEventListener('click', function () {
+      play(parseInt(c.getAttribute('data-move'), 10));
+    });
+  });
+
+  resetBtn.addEventListener('click', function () {
+    win = 0; lose = 0; draw = 0;
+    setScore();
+    result.className = '';
+    result.textContent = '比分已清空，请出拳 👇';
+    playerHand.textContent = '✊';
+    cpuHand.textContent = '✊';
+  });
+})();
+</script>
+</body>
+</html>
